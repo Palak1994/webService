@@ -7,6 +7,6 @@ data class BitcoinTracker (val x:X)
 {
     data class X(val time:Long,val hash:String,val out:List<Out>)
     data class  Out(
-        val value:String
+        var value:String
     )
 }

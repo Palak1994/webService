@@ -6,10 +6,20 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import java.text.DateFormat
+import java.text.SimpleDateFormat
+import java.util.*
 
-class DataAdapter(val context: Context,var dataList:List<BitcoinTracker> ) :RecyclerView.Adapter<RecyclerView.ViewHolder>(){
+class DataAdapter(val context: Context, var dataList: List<BitcoinTracker>) :RecyclerView.Adapter<RecyclerView.ViewHolder>(){
+    lateinit var price:TextView
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return DataViewHolder( LayoutInflater.from(parent.context).inflate(R.layout.item,parent,false))
+        return DataViewHolder(
+            LayoutInflater.from(parent.context).inflate(
+                R.layout.item,
+                parent,
+                false
+            )
+        )
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
@@ -21,10 +31,18 @@ class DataAdapter(val context: Context,var dataList:List<BitcoinTracker> ) :Recy
        return dataList.size
     }
     inner class DataViewHolder(view: View):RecyclerView.ViewHolder(view){
-        fun bind(item:BitcoinTracker){
+        fun bind(item: BitcoinTracker){
            itemView.findViewById<TextView>(R.id.hash).text=item.x.hash;
             itemView.findViewById<TextView>(R.id.time).text=item.x.time.toString();
-          //  itemView.findViewById<TextView>(R.id.amount).text=item.data.price.get(0);
+            price=itemView.findViewById<TextView>(R.id.amount);
+            itemView.findViewById<TextView>(R.id.amount).text="$"+item.x.out.get(0).value
+            val format: DateFormat = SimpleDateFormat("dd/MM/yyyy HH:mm:ss")
+            format.setTimeZone(TimeZone.getTimeZone("Asia/Kolkata"))
+
+
+            var formatted: String = format.format(item.x.time*1000L)
+            println(formatted)
+            itemView.findViewById<TextView>(R.id.time).text="Time: "+formatted
         }
     }
 
