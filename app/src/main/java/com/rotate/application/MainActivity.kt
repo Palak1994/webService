@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
@@ -87,6 +89,7 @@ class MainActivity : AppCompatActivity() {
                     override fun onResponse(call: Call<Convert>, response: Response<Convert>) {
                         if (response.isSuccessful) {
                             //There is a limition with the api if the limit exceed then it will take the default value
+
                             var price =
                                 ((bitcoin.x.out.get(0).value.toDouble()) * (0.00000001)) * (response.body()?.USD
                                     ?: "40596.10").toDouble()
@@ -111,6 +114,7 @@ class MainActivity : AppCompatActivity() {
                                 recyclerView.layoutManager = linearLayoutManager
                                 dataAdapter = DataAdapter(this@MainActivity, list)
                                 recyclerView.adapter = dataAdapter
+                                findViewById<TextView>(R.id.loading).visibility=View.GONE
                             }
                         }
                     }

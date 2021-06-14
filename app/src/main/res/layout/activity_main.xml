@@ -20,6 +20,14 @@
             app:popupTheme="@style/Theme.MyApplication.PopupOverlay" />
 
     </com.google.android.material.appbar.AppBarLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:textStyle="bold"
+        android:text="Connecting..."
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:id="@+id/loading"/>
 
    <androidx.recyclerview.widget.RecyclerView
        android:layout_width="match_parent"
