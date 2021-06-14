@@ -79,8 +79,6 @@ class MainActivity : AppCompatActivity() {
 
             override fun onMessage(message: String?) {
                 Log.d(TAG, "onMessage: $message")
-                //setUpBtcPriceText(message)
-
                 val gson = Gson()
                 val bitcoin: BitcoinTracker = gson.fromJson(message, BitcoinTracker::class.java)
                 val request = ApiFactory.buildService(ApiInterface::class.java)
@@ -88,7 +86,7 @@ class MainActivity : AppCompatActivity() {
                 call.enqueue(object : Callback<Convert> {
                     override fun onResponse(call: Call<Convert>, response: Response<Convert>) {
                         if (response.isSuccessful) {
-                            //
+                            //There is a limition with the api if the limit exceed then it will take the default value
                             var price =
                                 ((bitcoin.x.out.get(0).value.toDouble()) * (0.00000001)) * (response.body()?.USD
                                     ?: "40596.10").toDouble()
