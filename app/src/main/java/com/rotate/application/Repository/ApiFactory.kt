@@ -2,6 +2,7 @@ package com.rotate.application.Repository
 
 import android.content.Context
 import com.rotate.application.ApiInterface
+import com.rotate.application.AppConstant
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -13,7 +14,7 @@ object ApiFactory {
     private val client = OkHttpClient.Builder().build()
 
     private val retrofit = Retrofit.Builder()
-        .baseUrl("https://min-api.cryptocompare.com/")
+        .baseUrl(AppConstant.BASE_URL)
         .addConverterFactory(GsonConverterFactory.create())
         .client(client)
         .build()
@@ -48,7 +49,7 @@ object ApiFactory {
 
     private fun makeErosNowApiService(okHttpClient: OkHttpClient):
             Retrofit = Retrofit.Builder()
-        .baseUrl("https://min-api.cryptocompare.com/")
+        .baseUrl(AppConstant.BASE_URL)
         .client(okHttpClient)
         .build()
 

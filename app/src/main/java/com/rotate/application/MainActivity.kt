@@ -29,7 +29,6 @@ class MainActivity : AppCompatActivity() {
     var list: MutableList<BitcoinTracker> = ArrayList<BitcoinTracker>();
 
     companion object {
-        const val WEB_SOCKET_URL = "wss://ws.blockchain.info/inv"
         const val TAG = "Coinbase"
     }
 
@@ -39,6 +38,15 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         setSupportActionBar(findViewById(R.id.toolbar))
         recyclerView = findViewById<RecyclerView>(R.id.list)
+        var linearLayoutManager: LinearLayoutManager =
+            LinearLayoutManager(
+                this@MainActivity,
+                LinearLayoutManager.VERTICAL,
+                false
+            )
+        recyclerView.layoutManager = linearLayoutManager
+        dataAdapter = DataAdapter(this@MainActivity, list)
+        recyclerView.adapter = dataAdapter
     }
 
     override fun onStart() {
@@ -47,15 +55,11 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        // Inflate the menu; this adds items to the action bar if it is present.
         menuInflater.inflate(R.menu.menu_main, menu)
         return true
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         return when (item.itemId) {
             R.id.action_settings -> true
             else -> super.onOptionsItemSelected(item)
@@ -63,7 +67,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initWebSocket() {
-        val coinbaseUri: URI? = URI(WEB_SOCKET_URL)
+        val coinbaseUri: URI? = URI(AppConstant.WEB_SOCKET_URL)
 
         createWebSocketClient(coinbaseUri)
         val socketFactory: SSLSocketFactory = SSLSocketFactory.getDefault() as SSLSocketFactory
@@ -105,16 +109,8 @@ class MainActivity : AppCompatActivity() {
                                 }
                             }
                             runOnUiThread {
-                                var linearLayoutManager: LinearLayoutManager =
-                                    LinearLayoutManager(
-                                        this@MainActivity,
-                                        LinearLayoutManager.VERTICAL,
-                                        false
-                                    )
-                                recyclerView.layoutManager = linearLayoutManager
-                                dataAdapter = DataAdapter(this@MainActivity, list)
-                                recyclerView.adapter = dataAdapter
-                                findViewById<TextView>(R.id.loading).visibility=View.GONE
+                                dataAdapter.notifyDataSetChanged()
+                                findViewById<TextView>(R.id.loading).visibility = View.GONE
                             }
                         }
                     }
@@ -129,7 +125,6 @@ class MainActivity : AppCompatActivity() {
 
             override fun onClose(code: Int, reason: String?, remote: Boolean) {
                 Log.d(TAG, "onClose" + reason)
-                // unsubscribe()
             }
 
             override fun onError(ex: Exception?) {
